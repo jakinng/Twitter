@@ -24,7 +24,7 @@ public class User {
         return screenName;
     }
 
-    public String getPublicImageUrl() {
+    public String getProfileImageUrl() {
         return profileImageUrl;
     }
 }
