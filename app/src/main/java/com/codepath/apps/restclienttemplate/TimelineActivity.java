@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -88,9 +89,12 @@ public class TimelineActivity extends AppCompatActivity {
     // Performs actions based on the menu items clicked
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Compose icon has been selected
         if (item.getItemId() == R.id.compose) {
             Toast toast = Toast.makeText(this, "Compose a new tweet!", Toast.LENGTH_SHORT);
             toast.show();
+            Intent intent = new Intent(this, ComposeActivity.class);
+            startActivity(intent);
         }
         if (item.getItemId() == R.id.logout_button) {
             Toast toast = Toast.makeText(this, "Logging out!", Toast.LENGTH_SHORT);
@@ -100,6 +104,6 @@ public class TimelineActivity extends AppCompatActivity {
             finish();
             client.clearAccessToken();
         }
-    return true;
+        return true;
     }
 }
