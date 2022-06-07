@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONException;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ import okhttp3.Headers;
 public class TimelineActivity extends AppCompatActivity {
 
     public static final String TAG = "TimelineActivity";
+    public static final int REQUEST_CODE = 12345;
 
     TwitterClient client;
     RecyclerView rvTweets;
@@ -60,7 +63,6 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.i(TAG, "onSuccess! " + json.toString());
-
                 // Populate tweets with the JSON array
                 try {
                     tweets.addAll(Tweet.fromJsonArray(json.jsonArray));
@@ -94,7 +96,7 @@ public class TimelineActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(this, "Compose a new tweet!", Toast.LENGTH_SHORT);
             toast.show();
             Intent intent = new Intent(this, ComposeActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE);
         }
         if (item.getItemId() == R.id.logout_button) {
             Toast toast = Toast.makeText(this, "Logging out!", Toast.LENGTH_SHORT);
@@ -105,5 +107,18 @@ public class TimelineActivity extends AppCompatActivity {
             client.clearAccessToken();
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Tweet tweet = Parcels.unwrap(data.getParcelableExtra(Tweet.class.getSimpleName()));
+                tweets.add(0, tweet);
+                adapter.notifyItemInserted(0);
+                rvTweets.smoothScrollToPosition(0);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
