@@ -3,6 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/logout_button"
+        android:icon="@drawable/ic_logout_white_24dp"
+        android:title="Log Out"
+        android:visible="true"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/compose"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="Compose"

@@ -52,6 +52,7 @@ public class TimelineActivity extends AppCompatActivity {
         populateHomeTimeLine();
     }
 
+    // Add tweets to the home timeline
     private void populateHomeTimeLine() {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
 
@@ -75,6 +76,7 @@ public class TimelineActivity extends AppCompatActivity {
         });
     }
 
+    // Inflate the menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if present
@@ -83,12 +85,21 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
 
+    // Performs actions based on the menu items clicked
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.compose) {
             Toast toast = Toast.makeText(this, "Compose a new tweet!", Toast.LENGTH_SHORT);
             toast.show();
         }
-        return true;
+        if (item.getItemId() == R.id.logout_button) {
+            Toast toast = Toast.makeText(this, "Logging out!", Toast.LENGTH_SHORT);
+            toast.show();
+
+            // Navigate back to LoginActivity and forget the login token
+            finish();
+            client.clearAccessToken();
+        }
+    return true;
     }
 }
