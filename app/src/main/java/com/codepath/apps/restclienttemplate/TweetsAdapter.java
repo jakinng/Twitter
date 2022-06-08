@@ -73,6 +73,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public TextView tvScreenName;
         public TextView tvBody;
         public ImageView ivProfileImage;
+        public ImageView ivImageEntity;
 
         public ViewHolder(View itemView) {
             // Stores itemView in public final member variable that can be used to access the
@@ -82,12 +83,19 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName = (TextView) itemView.findViewById(R.id.tvScreenName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
+            ivImageEntity = (ImageView) itemView.findViewById(R.id.ivImageEntity);
         }
 
         public void bind(Tweet tweet) {
             tvScreenName.setText(tweet.getUser().getScreenName());
             tvBody.setText(tweet.getBody());
             Glide.with(context).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+            if (tweet.getImageUrl() != null) {
+                ivImageEntity.setVisibility(View.VISIBLE);
+                Glide.with(context).load(tweet.getImageUrl()).into(ivImageEntity);
+            } else {
+                ivImageEntity.setVisibility(View.GONE);
+            }
         }
     }
 }
