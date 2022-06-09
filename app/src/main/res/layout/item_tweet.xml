@@ -36,6 +36,7 @@
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:text="TextView"
+        android:autoLink="all"
         tools:text="i'm making twitter " />
 
     <ImageView

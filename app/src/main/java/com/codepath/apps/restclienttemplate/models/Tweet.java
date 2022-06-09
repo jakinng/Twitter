@@ -52,8 +52,10 @@ public class Tweet {
         // put in the full text String if possible for the body fo the tweet
         if (jsonObject.has("full_text")) {
             tweet.body = jsonObject.getString("full_text");
+            Log.d(TAG, tweet.body);
         } else {
             tweet.body = jsonObject.getString("text");
+            Log.d(TAG, "NO FULL BODY " + tweet.body);
         }
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
