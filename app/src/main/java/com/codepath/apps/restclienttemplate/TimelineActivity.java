@@ -48,6 +48,9 @@ public class TimelineActivity extends AppCompatActivity {
     // Launcher for the composeActivity
     ActivityResultLauncher<Intent> composeActivityResultLauncher;
 
+    // Endless scroll
+    private EndlessRecyclerViewScrollListener scrollListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +66,18 @@ public class TimelineActivity extends AppCompatActivity {
         adapter = new TweetsAdapter(this, tweets);
 
         // Recycler view setup: layout manager and adapter
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvTweets.setLayoutManager(linearLayoutManager);
+        // Retain an instance so that you can call resetState() for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                loadNextDataFromApi(page);
+            }
+        };
+
+        rvTweets.addOnScrollListener(scrollListener);
         rvTweets.setAdapter(adapter);
 
         // Display tweets on timeline
@@ -105,15 +119,37 @@ public class TimelineActivity extends AppCompatActivity {
                 });
     }
 
+    // Append the next page of data into the adapter
+    // Sends out a network request and appends new data items to the adapter
+    private void loadNextDataFromApi(int page) {
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                try {
+                    adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "Load more data error: " + throwable.toString());
+            }
+        });
+    }
+
     private void fetchTimelineAsync(int page) {
         // Send the network request to fetch the updated data
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 adapter.clear();
-                // TODO : ask if this is how to do this? why not just do the same as in populateHomeTimeline??/call it?
                 try {
                     adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
+                    // Reset endless scroll listener after refresh
+                    scrollListener.resetState();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -136,8 +172,8 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.i(TAG, "onSuccess! " + json.toString());
                 // Populate tweets with the JSON array
                 try {
-                    tweets.addAll(Tweet.fromJsonArray(json.jsonArray));
-                    adapter.notifyDataSetChanged();
+                    // automatically notifies adapter that dataset has changed
+                    adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
