@@ -1,5 +1,9 @@
 package com.codepath.apps.restclienttemplate;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,12 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -38,6 +44,9 @@ public class TimelineActivity extends AppCompatActivity {
     TweetsAdapter adapter;
 
     private SwipeRefreshLayout swipeContainer;
+
+    // Launcher for the composeActivity
+    ActivityResultLauncher<Intent> composeActivityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +78,31 @@ public class TimelineActivity extends AppCompatActivity {
                 fetchTimelineAsync(0);
             }
         });
+
         // Configure the refreshing colors
         // TODO : change these colors to look better
-//        swipeContainer.setColorSchemeResources(
-//                android.R.color.holo_blue_bright,
-//                android.R.color.holo_green_light,
-//                android.R.color.holo_orange_light,
-//                android.R.color.holo_red_light);
+        swipeContainer.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        // Setup the launcher for the compose activity upon creation
+        composeActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            // There are no request codes
+//                            Intent data = result.getData();
+                            Tweet tweet = Parcels.unwrap(result.getData().getParcelableExtra(Tweet.class.getSimpleName()));
+                            tweets.add(0, tweet);
+                            adapter.notifyItemInserted(0);
+                            rvTweets.smoothScrollToPosition(0);
+                        }
+                    }
+                });
     }
 
     private void fetchTimelineAsync(int page) {
@@ -139,9 +166,11 @@ public class TimelineActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.compose) {
             Toast toast = Toast.makeText(this, "Compose a new tweet!", Toast.LENGTH_SHORT);
             toast.show();
-            Intent intent = new Intent(this, ComposeActivity.class);
-            startActivityForResult(intent, REQUEST_CODE);
+
+            // Start the compose activity for a result
+            startComposeActivity();
         }
+
         if (item.getItemId() == R.id.logout_button) {
             Toast toast = Toast.makeText(this, "Logging out!", Toast.LENGTH_SHORT);
             toast.show();
@@ -153,16 +182,12 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Tweet tweet = Parcels.unwrap(data.getParcelableExtra(Tweet.class.getSimpleName()));
-                tweets.add(0, tweet);
-                adapter.notifyItemInserted(0);
-                rvTweets.smoothScrollToPosition(0);
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+    // Uses launcher to start a new ComposeActivity that can return a result (the body of the composed tweet) to the parent activity (this TimelineActivity)
+    public void startComposeActivity() {
+        Intent intent = new Intent(this, ComposeActivity.class);
+
+        //Launch activity to get result
+        composeActivityResultLauncher.launch(intent);
     }
+
 }
