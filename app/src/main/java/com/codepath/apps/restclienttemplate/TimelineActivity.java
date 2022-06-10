@@ -50,6 +50,8 @@ public class TimelineActivity extends AppCompatActivity {
     TweetsAdapter adapter;
     TextView title;
 
+    long maxId;
+
     private SwipeRefreshLayout swipeContainer;
 
     // Launcher for the composeActivity
@@ -108,10 +110,12 @@ public class TimelineActivity extends AppCompatActivity {
 
         rvTweets.addOnScrollListener(scrollListener);
         rvTweets.setAdapter(adapter);
+        // Initialize maxId
+        maxId = 0;
 
         // Display tweets on timeline
-//        populateHomeTimeLine();
-        populateHomeTimeLineTest();
+        populateHomeTimeLine();
+//        populateHomeTimeLineTest();
 
         // Set up the swipe refresh container
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -154,7 +158,9 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 try {
-                    adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
+                    List<Tweet> loadedTweets = Tweet.fromJsonArray(json.jsonArray);
+                    adapter.addAll(loadedTweets);
+                    maxId = Tweet.getLowestId(loadedTweets);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -165,7 +171,7 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d(TAG, "Load more data error: " + throwable.toString());
             }
         },
-                10000);
+                maxId);
     }
 
     private void fetchTimelineAsync(int page) {

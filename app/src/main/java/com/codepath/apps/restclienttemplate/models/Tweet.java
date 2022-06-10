@@ -26,7 +26,7 @@ public class Tweet {
     public String createdAt;
     public User user;
     public String imageUrl;
-    public int id;
+    public long id;
 
     public String getBody() {
         return body;
@@ -42,7 +42,7 @@ public class Tweet {
 
     public String getImageUrl() { return imageUrl; }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -51,7 +51,7 @@ public class Tweet {
 
     }
 
-    public Tweet(String body, String createdAt, User user, String imageUrl, int id) {
+    public Tweet(String body, String createdAt, User user, String imageUrl, long id) {
         this.body = body;
         this.createdAt = createdAt;
         this.user = user;
@@ -83,7 +83,7 @@ public class Tweet {
         }
 //        Log.d(TAG, Tweet.getRelativeTimeAgo(tweet.createdAt));
 
-        tweet.id = jsonObject.getInt("id");
+        tweet.id = jsonObject.getLong("id");
         Log.d(TAG, tweet.body);
         Log.d(TAG, String.valueOf(tweet.id));
         return tweet;
@@ -141,8 +141,16 @@ public class Tweet {
         return "@" + user.getScreenName();
     }
 
-//    public static int getLowestId(List<Tweet> tweets) {
-//        int lowestId = 2078658560;
-//        return lowestId;
-//    }
+    // Return the lowest ID number of tweets in a list
+    public static long getLowestId(List<Tweet> tweets) {
+        long lowestId = Long.MAX_VALUE;
+        long newId;
+        for (int i = 0; i < tweets.size(); i++) {
+            newId = tweets.get(i).getId();
+            if (newId < lowestId) {
+                lowestId = newId;
+            }
+        }
+        return lowestId - 1;
+    }
 }
