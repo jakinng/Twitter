@@ -7,7 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterInside;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.parceler.Parcels;
@@ -37,6 +39,9 @@ public class TweetDetailActivity extends AppCompatActivity {
         tvScreenName.setText(tweet.getAtScreenName());
         tvBody.setText(tweet.getBody());
         Glide.with(this).load(tweet.getUser().getProfileImageUrl()).transform(new CircleCrop()).into(ivProfileImage);
-        Glide.with(this).load(tweet.getImageUrl()).into(ivAttachedImage);
+
+        int corner_radius = 40;
+        Glide.with(this).load(tweet.getImageUrl()).transform(new CenterInside(), new RoundedCorners(corner_radius)).into(ivAttachedImage);
+
     }
 }

@@ -7,12 +7,16 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -51,10 +55,15 @@ public class TimelineActivity extends AppCompatActivity {
     // Endless scroll
     private EndlessRecyclerViewScrollListener scrollListener;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+        // Add the toolbar instead of the actionbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         client = TwitterApp.getRestClient(this);
 
@@ -109,10 +118,8 @@ public class TimelineActivity extends AppCompatActivity {
         // Configure the refreshing colors
         // TODO : change these colors to look better
         swipeContainer.setColorSchemeResources(
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+                R.color.twitter_blue_50,
+                R.color.medium_gray);
 
         // Setup the launcher for the compose activity upon creation
         composeActivityResultLauncher = registerForActivityResult(
@@ -202,7 +209,7 @@ public class TimelineActivity extends AppCompatActivity {
     private void populateHomeTimeLineTest() {
         List<Tweet> fakeTweets = new ArrayList<Tweet>();
         for (int i = 0; i <= 20; i++) {
-            fakeTweets.add(new Tweet("hi im jakin <3", "Wed Oct 10 20:19:24 +0000 2018", new User("Jakin Ng", "jakinng", "https://pbs.twimg.com/profile_images/1286602874948968448/auYOCufc.jpg"), null, 105018));
+            fakeTweets.add(new Tweet("hi im jakin <3", "Wed Oct 10 20:19:24 +0000 2018", new User("Jakin Ng", "jakinng", "https://pbs.twimg.com/profile_images/1286602874948968448/auYOCufc.jpg"), "https://pbs.twimg.com/profile_images/1286602874948968448/auYOCufc.jpg", 105018));
         }
         adapter.addAll(fakeTweets);
     }

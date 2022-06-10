@@ -77,7 +77,7 @@ public class Tweet {
             JSONArray media = entities.getJSONArray("media");
             String mediaUrl = media.getJSONObject(0).getString("media_url_https");
             tweet.imageUrl = mediaUrl;
-//            Log.d(TAG, mediaUrl);
+            Log.d(TAG, mediaUrl);
         } else {
 //            Log.d(TAG, "No media attached to this tweet!");
         }

@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterInside;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.util.List;
@@ -122,7 +125,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             Glide.with(context).load(tweet.getUser().getProfileImageUrl()).transform(new CircleCrop()).into(ivProfileImage);
             if (tweet.getImageUrl() != null) {
                 ivImageEntity.setVisibility(View.VISIBLE);
-                Glide.with(context).load(tweet.getImageUrl()).into(ivImageEntity);
+                int corner_radius = 40;
+
+                Glide.with(context).load(tweet.getImageUrl()).transform(new CenterInside(), new RoundedCorners(corner_radius)).into(ivImageEntity);
             } else {
                 ivImageEntity.setVisibility(View.GONE);
             }
