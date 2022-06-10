@@ -8,6 +8,14 @@
     android:theme="@style/ToolbarTheme"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginRight="12dp"
+        android:gravity="center_vertical"
+        android:src="@drawable/ic_launcher_twitter_round" />
+
     <TextView
         android:id="@+id/toolbarTitle"
         style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"

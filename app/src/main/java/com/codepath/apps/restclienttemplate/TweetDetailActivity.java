@@ -1,8 +1,10 @@
 package com.codepath.apps.restclienttemplate;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,10 +24,24 @@ public class TweetDetailActivity extends AppCompatActivity {
     private ImageView ivProfileImage;
     private ImageView ivAttachedImage;
 
+    private TextView title;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet_detail);
+
+        // Add the toolbar instead of the actionbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // Remove default title text
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        // Get access to the custom title view
+        title = (TextView) toolbar.findViewById(R.id.toolbarTitle);
+
+        // TODO : figure out how to center the title
+        title.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+        title.setText("Tweet");
 
         tvName = (TextView) findViewById(R.id.tvName);
         tvScreenName = (TextView) findViewById(R.id.tvScreenName);
