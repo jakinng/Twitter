@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -101,8 +102,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public TextView tvBody;
         public ImageView ivProfileImage;
         public ImageView ivImageEntity;
-        public ImageButton buttonLiked;
-        public ImageButton buttonRetweeted;
+        public Button buttonLiked;
+        public Button buttonRetweeted;
 
         public ViewHolder(View itemView) {
             // Stores itemView in public final member variable that can be used to access the
@@ -114,8 +115,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
             ivImageEntity = (ImageView) itemView.findViewById(R.id.ivImageEntity);
-            buttonLiked = (ImageButton) itemView.findViewById(R.id.buttonLiked);
-            buttonRetweeted = (ImageButton) itemView.findViewById(R.id.buttonRetweeted);
+            buttonLiked = (Button) itemView.findViewById(R.id.buttonLiked);
+            buttonRetweeted = (Button) itemView.findViewById(R.id.buttonRetweeted);
 
             // Setup the click listener
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -148,10 +149,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
             // Set liked button to be true or false
             if (tweet.isLiked()) {
-                buttonLiked.setImageResource(R.drawable.ic_vector_heart);
+                buttonLiked.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_heart, 0, 0, 0);
             } else {
-                buttonLiked.setImageResource(R.drawable.ic_vector_heart_stroke);
+                buttonLiked.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_heart_stroke, 0, 0, 0);
             }
+            buttonLiked.setText(String.valueOf(tweet.getLikedCount()));
             buttonLiked.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -159,7 +161,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         client.unlikeTweet(tweet.getId(), new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                buttonLiked.setImageResource(R.drawable.ic_vector_heart_stroke);
+                                buttonLiked.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_heart_stroke, 0, 0, 0);
+                                tweet.likedCount = tweet.getLikedCount() - 1;
+                                buttonLiked.setText(String.valueOf(tweet.getLikedCount()));
                             }
 
                             @Override
@@ -171,7 +175,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         client.likeTweet(tweet.getId(), new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                buttonLiked.setImageResource(R.drawable.ic_vector_heart);
+                                buttonLiked.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_heart, 0, 0, 0);
+                                tweet.likedCount = tweet.getLikedCount() + 1;
+                                buttonLiked.setText(String.valueOf(tweet.getLikedCount()));
                             }
 
                             @Override
@@ -186,10 +192,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
             // Set retweeted button to be true or false
             if (tweet.isRetweeted()) {
-                buttonRetweeted.setImageResource(R.drawable.ic_vector_retweet);
+                buttonRetweeted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_retweet, 0, 0, 0);
             } else {
-                buttonRetweeted.setImageResource(R.drawable.ic_vector_retweet_stroke);
+                buttonRetweeted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_retweet_stroke, 0, 0, 0);
             }
+            buttonRetweeted.setText(String.valueOf(tweet.getRetweetedCount()));
             buttonRetweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -197,7 +204,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         client.unretweet(tweet.getId(), new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                buttonRetweeted.setImageResource(R.drawable.ic_vector_retweet_stroke);
+                                buttonRetweeted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_retweet_stroke, 0, 0, 0);
+                                tweet.retweetedCount = tweet.getRetweetedCount() - 1;
+                                buttonRetweeted.setText(String.valueOf(tweet.getRetweetedCount()));
                             }
 
                             @Override
@@ -209,7 +218,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         client.retweet(tweet.getId(), new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                buttonRetweeted.setImageResource(R.drawable.ic_vector_retweet);
+                                buttonRetweeted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_retweet, 0, 0, 0);
+                                tweet.retweetedCount = tweet.getRetweetedCount() + 1;
+                                buttonRetweeted.setText(String.valueOf(tweet.getRetweetedCount()));
                             }
 
                             @Override

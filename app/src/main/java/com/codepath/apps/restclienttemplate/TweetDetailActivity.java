@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -36,8 +37,8 @@ public class TweetDetailActivity extends AppCompatActivity {
     private ImageView ivProfileImage;
     private ImageView ivAttachedImage;
     private TextView title;
-    private ImageButton buttonLiked;
-    private ImageButton buttonRetweeted;
+    private Button buttonLiked;
+    private Button buttonRetweeted;
 
     private Tweet tweet;
 
@@ -67,8 +68,8 @@ public class TweetDetailActivity extends AppCompatActivity {
         tvBody = (TextView) findViewById(R.id.tvBody);
         ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
         ivAttachedImage = (ImageView) findViewById(R.id.ivAttachedImage);
-        buttonLiked = (ImageButton) findViewById(R.id.buttonLiked);
-        buttonRetweeted = (ImageButton) findViewById(R.id.buttonRetweeted);
+        buttonLiked = (Button) findViewById(R.id.buttonLiked);
+        buttonRetweeted = (Button) findViewById(R.id.buttonRetweeted);
 
         tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra(Tweet.class.getSimpleName()));
 
@@ -80,10 +81,15 @@ public class TweetDetailActivity extends AppCompatActivity {
         int corner_radius = 40;
         Glide.with(this).load(tweet.getImageUrl()).transform(new CenterInside(), new RoundedCorners(corner_radius)).into(ivAttachedImage);
 
+        // TODO : clean up this code
+        // TODO : when going back from tweet detail activity, home timeline does not reflect changes
         // Set liked button to be true or false
         if (tweet.isLiked()) {
-            buttonLiked.setImageResource(R.drawable.ic_vector_heart);
+            buttonLiked.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_heart, 0, 0, 0);
+        } else {
+            buttonLiked.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_heart_stroke, 0, 0, 0);
         }
+        buttonLiked.setText(String.valueOf(tweet.getLikedCount()));
         buttonLiked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +97,9 @@ public class TweetDetailActivity extends AppCompatActivity {
                     client.unlikeTweet(tweet.getId(), new JsonHttpResponseHandler() {
                                                @Override
                                                public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                                   buttonLiked.setImageResource(R.drawable.ic_vector_heart_stroke);
+                                                   buttonLiked.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_heart_stroke, 0, 0, 0);
+                                                   tweet.likedCount = tweet.getLikedCount() - 1;
+                                                   buttonLiked.setText(String.valueOf(tweet.getLikedCount()));
                                                }
 
                                                @Override
@@ -103,7 +111,9 @@ public class TweetDetailActivity extends AppCompatActivity {
                     client.likeTweet(tweet.getId(), new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Headers headers, JSON json) {
-                            buttonLiked.setImageResource(R.drawable.ic_vector_heart);
+                            buttonLiked.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_heart, 0, 0, 0);
+                            tweet.likedCount = tweet.getLikedCount() + 1;
+                            buttonLiked.setText(String.valueOf(tweet.getLikedCount()));
                         }
 
                         @Override
@@ -118,17 +128,21 @@ public class TweetDetailActivity extends AppCompatActivity {
 
         // Set retweeted button to be true or false
         if (tweet.isRetweeted()) {
-            buttonRetweeted.setImageResource(R.drawable.ic_vector_retweet);
+            buttonRetweeted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_retweet, 0, 0, 0);
+        } else {
+            buttonRetweeted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_retweet_stroke, 0, 0, 0);
         }
+        buttonRetweeted.setText(String.valueOf(tweet.getRetweetedCount()));
         buttonRetweeted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "I CLICKED IT!!!");
                 if (tweet.isRetweeted()) {
                     client.unretweet(tweet.getId(), new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Headers headers, JSON json) {
-                            buttonRetweeted.setImageResource(R.drawable.ic_vector_retweet_stroke);
+                            buttonRetweeted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_retweet_stroke, 0, 0, 0);
+                            tweet.retweetedCount = tweet.getRetweetedCount() - 1;
+                            buttonRetweeted.setText(String.valueOf(tweet.getRetweetedCount()));
                         }
 
                         @Override
@@ -140,7 +154,9 @@ public class TweetDetailActivity extends AppCompatActivity {
                     client.retweet(tweet.getId(), new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Headers headers, JSON json) {
-                            buttonRetweeted.setImageResource(R.drawable.ic_vector_retweet);
+                            buttonRetweeted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_retweet, 0, 0, 0);
+                            tweet.retweetedCount = tweet.getRetweetedCount() + 1;
+                            buttonRetweeted.setText(String.valueOf(tweet.getRetweetedCount()));
                         }
 
                         @Override
