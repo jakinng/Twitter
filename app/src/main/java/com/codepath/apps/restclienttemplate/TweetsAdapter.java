@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterInside;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import java.util.List;
@@ -33,6 +35,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     List<Tweet> tweets;
 
     TwitterClient client;
+    ClickReply clickReply;
 
     // setup the click listener
     private OnItemClickListener listener;
@@ -44,10 +47,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public void setOnItemClickListener(OnItemClickListener listener) { this.listener = listener; }
 
     // Pass in the tweet array into the constructor
-    public TweetsAdapter(Context context, List<Tweet> tweets, TwitterClient client) {
+    public TweetsAdapter(Context context, List<Tweet> tweets, TwitterClient client, ClickReply clickReply) {
         this.context = context;
         this.tweets = tweets;
         this.client = client;
+        this.clickReply = clickReply;
     }
 
     // For each row, inflate the layout
@@ -104,6 +108,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public ImageView ivImageEntity;
         public Button buttonLiked;
         public Button buttonRetweeted;
+        public Button buttonReply;
 
         public ViewHolder(View itemView) {
             // Stores itemView in public final member variable that can be used to access the
@@ -117,6 +122,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivImageEntity = (ImageView) itemView.findViewById(R.id.ivImageEntity);
             buttonLiked = (Button) itemView.findViewById(R.id.buttonLiked);
             buttonRetweeted = (Button) itemView.findViewById(R.id.buttonRetweeted);
+            buttonReply = (Button) itemView.findViewById(R.id.buttonReply);
 
             // Setup the click listener
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -232,6 +238,17 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     tweet.retweeted = !tweet.isRetweeted();
                 }
             });
+
+            buttonReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickReply.onClickReply(tweet.getUser());
+                }
+            });
         }
+    }
+
+    public interface ClickReply {
+        public void onClickReply(User user);
     }
 }

@@ -15,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -83,7 +84,16 @@ public class TimelineActivity extends AppCompatActivity {
 
         // Initialize the list of tweets and the adapter
         tweets = new ArrayList<Tweet>();
-        adapter = new TweetsAdapter(this, tweets, client);
+
+        TweetsAdapter.ClickReply clickReply = new TweetsAdapter.ClickReply() {
+            @Override
+            public void onClickReply(User user) {
+                Intent intent = new Intent(TimelineActivity.this, ComposeActivity.class);
+                intent.putExtra("username", user.getScreenName());
+                composeActivityResultLauncher.launch(intent);
+            }
+        };
+        adapter = new TweetsAdapter(this, tweets, client, clickReply);
 
         // Setup the click listener
         adapter.setOnItemClickListener(new TweetsAdapter.OnItemClickListener() {

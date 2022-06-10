@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONException;
@@ -78,6 +79,12 @@ public class ComposeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // If this is a reply or not
+        if (getIntent().hasExtra("username")) {
+            String username = "@" + getIntent().getStringExtra("username") + " ";
+            etCompose.setText(username);
+        }
     }
 
 
