@@ -27,6 +27,10 @@ public class Tweet {
     public User user;
     public String imageUrl;
     public long id;
+    public int likedCount;
+    public boolean liked;
+    public int retweetedCount;
+    public boolean retweeted;
 
     public String getBody() {
         return body;
@@ -46,17 +50,37 @@ public class Tweet {
         return id;
     }
 
+    public int getLikedCount() {
+        return likedCount;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public int getRetweetedCount() {
+        return retweetedCount;
+    }
+
+    public boolean isRetweeted() {
+        return retweeted;
+    }
+
     // empty constructor needed by the Parceler library
     public Tweet() {
 
     }
 
-    public Tweet(String body, String createdAt, User user, String imageUrl, long id) {
+    public Tweet(String body, String createdAt, User user, String imageUrl, long id, int likedCount, boolean liked, int retweetedCount, boolean retweeted) {
         this.body = body;
         this.createdAt = createdAt;
         this.user = user;
         this.imageUrl = imageUrl;
         this.id = id;
+        this.likedCount = likedCount;
+        this.liked = liked;
+        this.retweetedCount = retweetedCount;
+        this.retweeted = retweeted;
     }
 
     // returns a Tweet object, given a JSON object describing that tweet
@@ -68,6 +92,7 @@ public class Tweet {
         } else {
             tweet.body = jsonObject.getString("text");
         }
+        Log.d(TAG, tweet.body);
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
 
@@ -84,8 +109,10 @@ public class Tweet {
 //        Log.d(TAG, Tweet.getRelativeTimeAgo(tweet.createdAt));
 
         tweet.id = jsonObject.getLong("id");
-        Log.d(TAG, tweet.body);
-        Log.d(TAG, String.valueOf(tweet.id));
+        tweet.likedCount = jsonObject.getInt("favorite_count");
+        tweet.liked = jsonObject.getBoolean("favorited");
+        tweet.retweetedCount = jsonObject.getInt("retweet_count");
+        tweet.retweeted = jsonObject.getBoolean("retweeted");
         return tweet;
     }
 

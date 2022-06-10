@@ -13,15 +13,17 @@ public class User {
     public String name;
     public String screenName;
     public String profileImageUrl;
+    public long userId;
 
     // empty constructor needed by the Parceler library
     public User() {
     }
 
-    public User(String name, String screenName, String profileImageUrl) {
+    public User(String name, String screenName, String profileImageUrl, long userId) {
         this.name = name;
         this.screenName = screenName;
         this.profileImageUrl = profileImageUrl;
+        this.userId = userId;
     }
 
     public static User fromJson(JSONObject jsonObject) throws JSONException {
@@ -29,7 +31,8 @@ public class User {
         user.name = jsonObject.getString("name");
         user.screenName = jsonObject.getString("screen_name");
         user.profileImageUrl = jsonObject.getString("profile_image_url_https").replace("_normal.", ".");
-        Log.d(TAG, user.profileImageUrl);
+        user.userId = jsonObject.getInt("id");
+        Log.d(TAG, String.valueOf(user.userId));
         return user;
     }
 

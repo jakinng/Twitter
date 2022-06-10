@@ -20,7 +20,9 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:background="@drawable/bottom_gray_border"
-        tools:context=".TweetDetailActivity">
+        tools:context=".TweetDetailActivity"
+        android:id="@+id/rlTweetBody"
+        >
 
         <TextView
             android:id="@+id/tvScreenName"
@@ -73,5 +75,45 @@
             android:layout_marginBottom="15dp"
             tools:srcCompat="@tools:sample/avatars" />
 
+
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlTweetBody"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="15dp">
+
+        <ImageButton
+            android:id="@+id/buttonRetweeted"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="@color/design_default_color_background"
+            android:src="@drawable/ic_vector_retweet_stroke"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageButton
+            android:id="@+id/buttonLiked"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:backgroundTint="@color/design_default_color_background"
+            android:src="@drawable/ic_vector_heart_stroke"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </RelativeLayout>
+
+
+
 </RelativeLayout>

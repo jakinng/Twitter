@@ -31,6 +31,7 @@ import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
@@ -89,7 +90,7 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View itemView, int position) {
                 // Open detail view of tweet
-                Toast.makeText(TimelineActivity.this, "Tweet at position " + position + " clicked!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(TimelineActivity.this, "Tweet at position " + position + " clicked!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(TimelineActivity.this, TweetDetailActivity.class);
                 intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweets.get(position)));
                 startActivity(intent);
@@ -114,8 +115,8 @@ public class TimelineActivity extends AppCompatActivity {
         maxId = 0;
 
         // Display tweets on timeline
-        populateHomeTimeLine();
-//        populateHomeTimeLineTest();
+//        populateHomeTimeLine();
+        populateHomeTimeLineTest();
 
         // Set up the swipe refresh container
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -207,7 +208,9 @@ public class TimelineActivity extends AppCompatActivity {
                 // Populate tweets with the JSON array
                 try {
                     // automatically notifies adapter that dataset has changed
-                    adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
+                    List<Tweet> loadedTweets = Tweet.fromJsonArray(json.jsonArray);
+                    adapter.addAll(loadedTweets);
+                    maxId = Tweet.getLowestId(loadedTweets);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -223,7 +226,7 @@ public class TimelineActivity extends AppCompatActivity {
     private void populateHomeTimeLineTest() {
         List<Tweet> fakeTweets = new ArrayList<Tweet>();
         for (int i = 0; i <= 20; i++) {
-            fakeTweets.add(new Tweet("hi im jakin <3", "Wed Oct 10 20:19:24 +0000 2018", new User("Jakin Ng", "jakinng", "https://pbs.twimg.com/profile_images/1286602874948968448/auYOCufc.jpg"), "https://pbs.twimg.com/profile_images/1286602874948968448/auYOCufc.jpg", 105018));
+            fakeTweets.add(new Tweet("hi im jakin <3", "Wed Oct 10 20:19:24 +0000 2018", new User("Jakin Ng", "jakinng", "https://pbs.twimg.com/profile_images/1286602874948968448/auYOCufc.jpg", 1087705088L), "https://pbs.twimg.com/profile_images/1286602874948968448/auYOCufc.jpg", 105018, 100, true, 121, false));
         }
         adapter.addAll(fakeTweets);
     }
@@ -242,16 +245,16 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Compose icon has been selected
         if (item.getItemId() == R.id.compose) {
-            Toast toast = Toast.makeText(this, "Compose a new tweet!", Toast.LENGTH_SHORT);
-            toast.show();
+//            Toast toast = Toast.makeText(this, "Compose a new tweet!", Toast.LENGTH_SHORT);
+//            toast.show();
 
             // Start the compose activity for a result
             startComposeActivity();
         }
 
         if (item.getItemId() == R.id.logout_button) {
-            Toast toast = Toast.makeText(this, "Logging out!", Toast.LENGTH_SHORT);
-            toast.show();
+//            Toast toast = Toast.makeText(this, "Logging out!", Toast.LENGTH_SHORT);
+//            toast.show();
 
             // Navigate back to LoginActivity and forget the login token
             finish();
