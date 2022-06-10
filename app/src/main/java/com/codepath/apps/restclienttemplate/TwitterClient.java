@@ -33,6 +33,8 @@ public class TwitterClient extends OAuthBaseClient {
 	// See https://developer.chrome.com/multidevice/android/intents
 	public static final String REST_CALLBACK_URL_TEMPLATE = "intent://%s#Intent;action=android.intent.action.VIEW;scheme=%s;package=%s;S.browser_fallback_url=%s;end";
 
+	public static final int LOAD_AT_A_TIME = 5;
+
 	public TwitterClient(Context context) {
 		super(context, REST_API_INSTANCE,
 				REST_URL,
@@ -44,14 +46,23 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 	// DEFINE METHODS for different API endpoints here
-	public void getHomeTimeline(JsonHttpResponseHandler handler) {
+	public void getHomeTimeline(JsonHttpResponseHandler handler, int maxId) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
-		params.put("count", 5);
-		params.put("since_id", 0);
+		params.put("count", LOAD_AT_A_TIME);
 		params.put("tweet_mode", "extended");
+//		if (maxId != 0) {
+//			params.put("max_id", maxId);
+//		} else {
+//			params.put("since_id", 1);
+//		}
+		params.put("since_id", 1);
 		client.get(apiUrl, params, handler);
+	}
+
+	public void getHomeTimeline(JsonHttpResponseHandler handler) {
+		getHomeTimeline(handler, 0);
 	}
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint

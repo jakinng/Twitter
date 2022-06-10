@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONException;
@@ -36,7 +37,6 @@ import okhttp3.Headers;
 public class TimelineActivity extends AppCompatActivity {
 
     public static final String TAG = "TimelineActivity";
-    public static final int REQUEST_CODE = 12345;
 
     TwitterClient client;
     RecyclerView rvTweets;
@@ -65,6 +65,18 @@ public class TimelineActivity extends AppCompatActivity {
         tweets = new ArrayList<Tweet>();
         adapter = new TweetsAdapter(this, tweets);
 
+        // Setup the click listener
+        adapter.setOnItemClickListener(new TweetsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                // Open detail view of tweet
+                Toast.makeText(TimelineActivity.this, "Tweet at position " + position + " clicked!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(TimelineActivity.this, TweetDetailActivity.class);
+                intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweets.get(position)));
+                startActivity(intent);
+            }
+        });
+
         // Recycler view setup: layout manager and adapter
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(linearLayoutManager);
@@ -82,6 +94,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         // Display tweets on timeline
         populateHomeTimeLine();
+//        populateHomeTimeLineTest();
 
         // Set up the swipe refresh container
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -130,14 +143,14 @@ public class TimelineActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.d(TAG, "Load more data error: " + throwable.toString());
             }
-        });
+        },
+                10000);
     }
 
     private void fetchTimelineAsync(int page) {
@@ -186,6 +199,12 @@ public class TimelineActivity extends AppCompatActivity {
         });
     }
 
+    private void populateHomeTimeLineTest() {
+        List<Tweet> fakeTweets = new ArrayList<Tweet>();
+        fakeTweets.add(new Tweet("hi im jakin", "Wed Oct 10 20:19:24 +0000 2018", new User("Jakin Ng", "jakinng", "https://twitter.com/CarlBovisNature/status/1521887921888018442/photo/1"), null, 105018));
+        adapter.addAll(fakeTweets);
+    }
+
     // Inflate the menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -225,5 +244,4 @@ public class TimelineActivity extends AppCompatActivity {
         //Launch activity to get result
         composeActivityResultLauncher.launch(intent);
     }
-
 }

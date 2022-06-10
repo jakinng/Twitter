@@ -26,6 +26,7 @@ public class Tweet {
     public String createdAt;
     public User user;
     public String imageUrl;
+    public int id;
 
     public String getBody() {
         return body;
@@ -41,9 +42,21 @@ public class Tweet {
 
     public String getImageUrl() { return imageUrl; }
 
+    public int getId() {
+        return id;
+    }
+
     // empty constructor needed by the Parceler library
     public Tweet() {
 
+    }
+
+    public Tweet(String body, String createdAt, User user, String imageUrl, int id) {
+        this.body = body;
+        this.createdAt = createdAt;
+        this.user = user;
+        this.imageUrl = imageUrl;
+        this.id = id;
     }
 
     // returns a Tweet object, given a JSON object describing that tweet
@@ -69,6 +82,10 @@ public class Tweet {
 //            Log.d(TAG, "No media attached to this tweet!");
         }
 //        Log.d(TAG, Tweet.getRelativeTimeAgo(tweet.createdAt));
+
+        tweet.id = jsonObject.getInt("id");
+        Log.d(TAG, tweet.body);
+        Log.d(TAG, String.valueOf(tweet.id));
         return tweet;
     }
 
@@ -119,4 +136,13 @@ public class Tweet {
     public String getHandle() {
         return "@" + user.getScreenName() + " · " + getRelativeTimeAgo(createdAt);
     }
+
+    public String getAtScreenName() {
+        return "@" + user.getScreenName();
+    }
+
+//    public static int getLowestId(List<Tweet> tweets) {
+//        int lowestId = 2078658560;
+//        return lowestId;
+//    }
 }
