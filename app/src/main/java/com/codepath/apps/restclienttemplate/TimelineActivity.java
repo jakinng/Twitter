@@ -115,8 +115,8 @@ public class TimelineActivity extends AppCompatActivity {
         maxId = 0;
 
         // Display tweets on timeline
-//        populateHomeTimeLine();
-        populateHomeTimeLineTest();
+        populateHomeTimeLine();
+//        populateHomeTimeLineTest();
 
         // Set up the swipe refresh container
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
