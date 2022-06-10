@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -46,6 +47,7 @@ public class TimelineActivity extends AppCompatActivity {
     RecyclerView rvTweets;
     List<Tweet> tweets;
     TweetsAdapter adapter;
+    TextView title;
 
     private SwipeRefreshLayout swipeContainer;
 
@@ -64,6 +66,11 @@ public class TimelineActivity extends AppCompatActivity {
         // Add the toolbar instead of the actionbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        // Remove default title text
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        // Get access to the custom title view
+        title = (TextView) toolbar.findViewById(R.id.toolbarTitle);
+        title.setText("Home");
 
         client = TwitterApp.getRestClient(this);
 
