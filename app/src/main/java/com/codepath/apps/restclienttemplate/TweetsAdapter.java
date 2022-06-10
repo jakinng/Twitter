@@ -2,9 +2,11 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,13 +18,20 @@ import com.bumptech.glide.load.resource.bitmap.CenterInside;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import java.util.List;
 
+import okhttp3.Headers;
+
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
+    public static String TAG = "TweetsAdapter";
+
     // Pass in the context and a list of tweets
     Context context;
     List<Tweet> tweets;
+
+    TwitterClient client;
 
     // setup the click listener
     private OnItemClickListener listener;
@@ -34,9 +43,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public void setOnItemClickListener(OnItemClickListener listener) { this.listener = listener; }
 
     // Pass in the tweet array into the constructor
-    public TweetsAdapter(Context context, List<Tweet> tweets) {
+    public TweetsAdapter(Context context, List<Tweet> tweets, TwitterClient client) {
         this.context = context;
         this.tweets = tweets;
+        this.client = client;
     }
 
     // For each row, inflate the layout
@@ -91,6 +101,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public TextView tvBody;
         public ImageView ivProfileImage;
         public ImageView ivImageEntity;
+        public ImageButton buttonLiked;
+        public ImageButton buttonRetweeted;
 
         public ViewHolder(View itemView) {
             // Stores itemView in public final member variable that can be used to access the
@@ -102,6 +114,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
             ivImageEntity = (ImageView) itemView.findViewById(R.id.ivImageEntity);
+            buttonLiked = (ImageButton) itemView.findViewById(R.id.buttonLiked);
+            buttonRetweeted = (ImageButton) itemView.findViewById(R.id.buttonRetweeted);
 
             // Setup the click listener
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +145,82 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             } else {
                 ivImageEntity.setVisibility(View.GONE);
             }
+
+            // Set liked button to be true or false
+            if (tweet.isLiked()) {
+                buttonLiked.setImageResource(R.drawable.ic_vector_heart);
+            } else {
+                buttonLiked.setImageResource(R.drawable.ic_vector_heart_stroke);
+            }
+            buttonLiked.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (tweet.isLiked()) {
+                        client.unlikeTweet(tweet.getId(), new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                buttonLiked.setImageResource(R.drawable.ic_vector_heart_stroke);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.d(TAG, "Like tweet error: " + throwable.toString());
+                            }
+                        });
+                    } else {
+                        client.likeTweet(tweet.getId(), new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                buttonLiked.setImageResource(R.drawable.ic_vector_heart);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.d(TAG, "Like tweet error: " + throwable.toString());
+                            }
+                        });
+                    }
+                    tweet.liked = !tweet.isLiked();
+                }
+            });
+
+            // Set retweeted button to be true or false
+            if (tweet.isRetweeted()) {
+                buttonRetweeted.setImageResource(R.drawable.ic_vector_retweet);
+            } else {
+                buttonRetweeted.setImageResource(R.drawable.ic_vector_retweet_stroke);
+            }
+            buttonRetweeted.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (tweet.isRetweeted()) {
+                        client.unretweet(tweet.getId(), new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                buttonRetweeted.setImageResource(R.drawable.ic_vector_retweet_stroke);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.d(TAG, "Retweet error: " + throwable.toString());
+                            }
+                        });
+                    } else {
+                        client.retweet(tweet.getId(), new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                buttonRetweeted.setImageResource(R.drawable.ic_vector_retweet);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.d(TAG, "Like tweet error: " + throwable.toString());
+                            }
+                        });
+                    }
+                    tweet.retweeted = !tweet.isRetweeted();
+                }
+            });
         }
     }
 }

@@ -8,72 +8,114 @@
     android:background="@color/design_default_color_background"
     >
 
-<RelativeLayout
-    android:id="@+id/item_tweet"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="5dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginEnd="5dp"
-    android:background="@drawable/bottom_gray_border">
-
-    <ImageView
-        android:id="@+id/ivProfileImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="10dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/tvScreenName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@+id/tvName"
-        android:text="TextView"
-        android:textColor="@color/dark_gray"
-        tools:text="\@jakinng · now" />
-
-    <TextView
-        android:id="@+id/tvBody"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvScreenName"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="10dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        android:autoLink="all"
-        android:text="TextView"
-        android:textColor="@color/black"
-        tools:text="i'm making twitter " />
-
-    <ImageView
-        android:id="@+id/ivImageEntity"
+    <RelativeLayout
+        android:id="@+id/item_tweet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvBody"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/bottom_gray_border">
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        tools:text="Jakin Ng" />
-</RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/tweet_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivProfileImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="10dp"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tvScreenName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/tvName"
+                android:text="TextView"
+                android:textColor="@color/dark_gray"
+                tools:text="\@jakinng · now" />
+
+            <TextView
+                android:id="@+id/tvBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvScreenName"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toEndOf="@+id/ivProfileImage"
+                android:autoLink="all"
+                android:text="TextView"
+                android:textColor="@color/black"
+                tools:text="i'm making twitter " />
+
+            <ImageView
+                android:id="@+id/ivImageEntity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvBody"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="15dp"
+                android:layout_toEndOf="@+id/ivProfileImage"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/ivProfileImage"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                tools:text="Jakin Ng" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tweet_body"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp">
+
+            <ImageButton
+                android:id="@+id/buttonRetweeted"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="0dp"
+                android:backgroundTint="@color/design_default_color_background"
+                android:src="@drawable/ic_vector_retweet_stroke"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageButton
+                android:id="@+id/buttonLiked"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="5dp"
+                android:backgroundTint="@color/design_default_color_background"
+                android:src="@drawable/ic_vector_heart_stroke"
+                tools:srcCompat="@tools:sample/avatars" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
 </RelativeLayout>

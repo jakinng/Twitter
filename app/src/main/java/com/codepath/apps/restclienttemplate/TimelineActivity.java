@@ -83,7 +83,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         // Initialize the list of tweets and the adapter
         tweets = new ArrayList<Tweet>();
-        adapter = new TweetsAdapter(this, tweets);
+        adapter = new TweetsAdapter(this, tweets, client);
 
         // Setup the click listener
         adapter.setOnItemClickListener(new TweetsAdapter.OnItemClickListener() {
