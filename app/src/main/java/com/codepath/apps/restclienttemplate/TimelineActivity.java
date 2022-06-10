@@ -93,8 +93,8 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.setAdapter(adapter);
 
         // Display tweets on timeline
-        populateHomeTimeLine();
-//        populateHomeTimeLineTest();
+//        populateHomeTimeLine();
+        populateHomeTimeLineTest();
 
         // Set up the swipe refresh container
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -201,7 +201,9 @@ public class TimelineActivity extends AppCompatActivity {
 
     private void populateHomeTimeLineTest() {
         List<Tweet> fakeTweets = new ArrayList<Tweet>();
-        fakeTweets.add(new Tweet("hi im jakin", "Wed Oct 10 20:19:24 +0000 2018", new User("Jakin Ng", "jakinng", "https://twitter.com/CarlBovisNature/status/1521887921888018442/photo/1"), null, 105018));
+        for (int i = 0; i <= 20; i++) {
+            fakeTweets.add(new Tweet("hi im jakin <3", "Wed Oct 10 20:19:24 +0000 2018", new User("Jakin Ng", "jakinng", "https://pbs.twimg.com/profile_images/1286602874948968448/auYOCufc.jpg"), null, 105018));
+        }
         adapter.addAll(fakeTweets);
     }
 

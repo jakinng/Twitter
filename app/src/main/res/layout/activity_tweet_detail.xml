@@ -3,50 +3,67 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="5dp"
-    tools:context=".TweetDetailActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvScreenName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvName"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        tools:layout_editor_absoluteX="142dp"
-        tools:layout_editor_absoluteY="249dp"
-        tools:text="\@jakinng" />
-
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        tools:text="Jakin Ng" />
-
-    <ImageView
-        android:id="@+id/ivProfileImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/tvBody"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivProfileImage"
-        android:layout_marginTop="5dp"
-        tools:text="this is my tweet uwu" />
-
-    <ImageView
-        android:id="@+id/ivAttachedImage"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvBody"
-        android:layout_marginTop="5dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/bottom_gray_border"
+        tools:context=".TweetDetailActivity">
 
+        <TextView
+            android:id="@+id/tvScreenName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvName"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="2dp"
+            android:layout_toEndOf="@+id/ivProfileImage"
+            android:textColor="@color/dark_gray"
+            tools:layout_editor_absoluteX="142dp"
+            tools:layout_editor_absoluteY="249dp"
+            tools:text="\@jakinng" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="3dp"
+            android:layout_toEndOf="@+id/ivProfileImage"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            tools:text="Jakin Ng" />
+
+        <ImageView
+            android:id="@+id/ivProfileImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivProfileImage"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            tools:text="this is my tweet uwu" />
+
+        <ImageView
+            android:id="@+id/ivAttachedImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvBody"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </RelativeLayout>
 </RelativeLayout>

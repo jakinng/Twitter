@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.util.List;
@@ -118,7 +119,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName.setText(tweet.getHandle());
             tvName.setText(tweet.getUser().getName());
             tvBody.setText(tweet.getBody());
-            Glide.with(context).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+            Glide.with(context).load(tweet.getUser().getProfileImageUrl()).transform(new CircleCrop()).into(ivProfileImage);
             if (tweet.getImageUrl() != null) {
                 ivImageEntity.setVisibility(View.VISIBLE);
                 Glide.with(context).load(tweet.getImageUrl()).into(ivImageEntity);
